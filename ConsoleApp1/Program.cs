@@ -19,7 +19,7 @@ namespace SocketServer
                 sListener.Bind(ipEndPoint);
                 sListener.Listen(10);
 
-                while (true)
+                while (true) //Управління 
                 {
                     Console.WriteLine("Очiкування з'єднання {0}", ipEndPoint);
                     Socket handler = sListener.Accept();
@@ -27,13 +27,10 @@ namespace SocketServer
                     byte[] bytes = new byte[1024];
                     int bytesRec = handler.Receive(bytes);
                     data += Encoding.UTF8.GetString(bytes, 0, bytesRec);
-                    Console.Write("Полученный текст: " + data + "\n\n");
-                    string reply = "Спасибо за запрос в " + data.Length.ToString() + " символов";
-                    byte[] msg = Encoding.UTF8.GetBytes(reply);
-                    handler.Send(msg);
-                    if (data.IndexOf("<TheEnd>") > -1)
+                    Console.Write("Відповідь: " + data + "\n\n");
+                    if (data.IndexOf("Кiнець") > -1)
                     {
-                        Console.WriteLine("Сервер завершил соединение с клиентом.");
+                        Console.WriteLine("До побачення.");
                         break;
                     }
                     handler.Shutdown(SocketShutdown.Both);
